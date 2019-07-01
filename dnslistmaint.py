@@ -87,7 +87,7 @@ for server in servers:
         validservers.append(server)
 
 # write the content of the list to the disk for use
-with open(updatedlist) as resolvers:
+with open(updatedlist, "w+") as resolvers:
     resolvers.write(validservers)
 
 print("Update finished. Wrote {size} servers".format(size=len(validservers)))
