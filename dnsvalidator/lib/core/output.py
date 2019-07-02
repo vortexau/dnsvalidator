@@ -22,7 +22,7 @@ class OutputHelper(object):
         print("dnsvalidator v%s\tby James McLean (@vortexau) & Michael Skelton (@codingo_)" % __version__)
         print(self.seperator)
 
-    def terminal(self, level, target, command, message=""):
+    def terminal(self, level, target, message=""):
         if level == 0 and not self.verbose:
             return
 
@@ -39,15 +39,14 @@ class OutputHelper(object):
         format_args = {
            'time': strftime("%H:%M:%S", localtime()),
            'target': target,
-           'command': command,
            'message': message,
             'leader':leader
         }
 
         if level == 1:
-            template = '[{time}] {leader} [{target}] {command} {message}'
+            template = '[{time}] {leader} [{target}] {message}'
         else:
-            template = '[{time}] {leader} [{target}] {command} {message}'
+            template = '[{time}] {leader} [{target}] {message}'
             
         print(template.format(**format_args))
 
