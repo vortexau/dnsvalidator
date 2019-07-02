@@ -28,8 +28,10 @@ class OutputHelper(object):
 
         formatting = {
             0: Color('{autoblue}[VERBOSE]{/autoblue}'),
-            1: Color('{autogreen}[INFO]{/autogreen}'),
-            3: Color('{autobgyellow}{autored}[ERROR]{/autored}{/autobgyellow}')
+            1: Color('{autoyellow}[INFO]{/autoyellow}'),
+            2: Color('{autogreen}[ACCEPTED]{/autogreen}'),
+            3: Color('{autored}[REJECTED]{/autored}'),
+            4: Color('{autobgyellow}{autored}[ERROR]{/autored}{/autobgyellow}')
         }
 
         leader = formatting.get(level, '[#]')
@@ -53,4 +55,6 @@ class OutputHelper(object):
 class Level(IntEnum):
     VERBOSE = 0
     INFO = 1
-    ERROR = 3
+    ACCEPTED = 2
+    REJECTED = 3
+    ERROR = 4
