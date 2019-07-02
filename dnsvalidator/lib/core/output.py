@@ -2,7 +2,7 @@ from colorclass import Color
 from colorclass import disable_all_colors, enable_all_colors, is_enabled
 from time import localtime, strftime
 from enum import IntEnum
-from dnslistmaint.lib.core.__version__ import __version__
+from dnsvalidator.lib.core.__version__ import __version__
 
 
 class OutputHelper(object):
@@ -19,7 +19,7 @@ class OutputHelper(object):
             return
 
         print(self.seperator)
-        print("dnslistmaint v%s\tby James McLean (@vortexau) & Michael Skelton (@codingo_)" % __version__)
+        print("dnsvalidator v%s\tby James McLean (@vortexau) & Michael Skelton (@codingo_)" % __version__)
         print(self.seperator)
 
     def terminal(self, level, target, command, message=""):
