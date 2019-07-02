@@ -4,7 +4,7 @@ import requests
 import dns.resolver
 import re
 
-goodservers = ["1.1.1.1","8.8.8.8","9.9.9.9"]
+goodservers = ["1.1.1.1", "8.8.8.8", "9.9.9.9"]
 
 dnsserverlist = "https://public-dns.info/nameservers.txt"
 updatedlist = "resolvers.txt"
