@@ -109,8 +109,8 @@ def main():
     with open(updatedlist, "w+") as resolvers:
         resolvers.write(validservers)
 
-    print("Update finished. Wrote {size} servers".format(size=len(validservers)))
-
+    output.terminal(Level.INFO, 0,
+                    "Update finished. Wrote {size} servers".format(size=len(validservers)))
 
 if __name__ == "__main__":
     main()

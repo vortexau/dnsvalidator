@@ -43,8 +43,8 @@ class OutputHelper(object):
             'leader':leader
         }
 
-        if level == 1:
-            template = '[{time}] {leader} [{target}] {message}'
+        if target == 0:
+            template = '[{time}] {leader} {message}'
         else:
             template = '[{time}] {leader} [{target}] {message}'
             
