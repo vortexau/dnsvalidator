@@ -4,7 +4,7 @@ import requests
 import dns.resolver
 import re
 
-goodservers = ["1.1.1.1", "8.8.8.8", "9.9.9.9"]
+baselines = ["1.1.1.1", "8.8.8.8", "9.9.9.9"]
 
 dnsserverlist = "https://public-dns.info/nameservers.txt"
 updatedlist = "resolvers.txt"
@@ -20,34 +20,34 @@ servers = data.split()
 
 responses = {}
 
-# Perform resolution on each of the 'goodservers' 
-for goodserver in goodservers:
-    print("Resolving with", goodserver)
+# Perform resolution on each of the 'baselines' 
+for baseline in baselines:
+    print("Resolving with", baseline)
 
     thisserver = {}
 
     resolver = dns.resolver.Resolver(configure=False)
-    resolver.nameservers = [goodserver]
+    resolver.nameservers = [baseline]
     goodanswer = resolver.query(rootdomain, 'A')
 
     for rr in goodanswer:
         thisserver["goodip"] = str(rr)
 
     try:
-        nxdomanswer = resolver.query('lkjhuihuifr.' + rootdomain,'A')
+        nxdomanswer = resolver.query('lkjhuihuifr.' + rootdomain, 'A')
         thisserver["nxdomain"] = False
     except dns.resolver.NXDOMAIN:
         thisserver["nxdomain"] = True
 
-    responses[goodserver] = thisserver
+    responses[baseline] = thisserver
 
 # loop through the list
 for server in servers:
-    #print(server)
+    # print(server)
     server = server.strip()
 
     # Skip if not IPv4
-    valid = re.match("^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$",server)
+    valid = re.match("^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", server)
     if not valid:
         continue
 
@@ -72,7 +72,7 @@ for server in servers:
             resolvematches += 1
 
     try:
-        nxanswer = resolver.query('lkjlkjqqewdw.' + rootdomain,'A')
+        nxanswer = resolver.query('lkjlkjqqewdw.' + rootdomain, 'A')
     except dns.resolver.NXDOMAIN:
         gotnxdomain = True
     except:
