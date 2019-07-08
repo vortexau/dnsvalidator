@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import requests
 import dns.resolver
 import re
 import sys
@@ -17,14 +16,9 @@ def main():
 
     output = OutputHelper(arguments)
     output.print_banner()
-
-    # todo: move this into CLI options or a config file
     baselines = ["1.1.1.1", "8.8.8.8", "9.9.9.9"]
 
-    updatedlist = "resolvers.txt"
-
-    validservers = []
-
+    valid_servers = []
     responses = {}
 
     # Perform resolution on each of the 'baselines'
@@ -34,7 +28,7 @@ def main():
 
         resolver = dns.resolver.Resolver(configure=False)
         resolver.nameservers = [baseline]
-        goodanswer = resolver.query(rootdomain, 'A')
+        goodanswer = resolver.query(arguments.rootdomain, 'A')
 
         for rr in goodanswer:
             thisserver["goodip"] = str(rr)
@@ -93,18 +87,19 @@ def main():
 
         if resolvematches == 3 and nxdommatches == 3:
             output.terminal(Level.ACCEPTED, server, "provided valid response")
-            validservers.append(server)
+            valid_servers.append(server)
         else:
             output.terminal(Level.REJECTED, server, "invalid response received")
 
     # todo: move into proper class
     # write the content of the list to the disk for use
-    with open(updatedlist, "w+") as resolvers:
-        resolvers.write(validservers)
-
-    output.terminal(Level.INFO, 0,
-                    "Update finished. Wrote {size} servers".format(size=len(validservers)))
-
+    if arguments.output:
+        with open(arguments.output, "w+") as resolvers:
+            resolvers.write(valid_servers)
+            output.terminal(Level.INFO, 0,
+                            "Update finished. Wrote {size} servers".format(size=len(valid_servers)))
+        return
+    output.terminal(Level.INFO, 0, "Finished. Discovered {size} servers".format(size=len(valid_servers)))
 
 # Declare signal handler to immediately exit on KeyboardInterrupt
 def signal_handler(signal, frame):

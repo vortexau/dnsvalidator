@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import os.path
+import os
 import requests
 from urllib.parse import urlparse
 from argparse import ArgumentParser
@@ -105,6 +105,12 @@ class InputParser(object):
             metavar="FILE",
             type=lambda x: InputHelper.process_targets(parser, x)
         )
+
+        parser.add_argument(
+            '-o', dest='output', required=False,
+            help='Destination file to write output to.'
+        )
+
 
         parser.add_argument(
             '-r', dest='rootdomain', required=False,
