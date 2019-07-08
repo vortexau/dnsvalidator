@@ -86,7 +86,6 @@ class InputParser(object):
             '-tL', dest='target_list', required=False,
             help='Specify a list of target DNS servers to try to resolve. '
                  'May be a file, or URL to listing',
-            #metavar="FILE",
             default="https://public-dns.info/nameservers.txt",
             type=lambda x: InputHelper.process_targets(parser, x)
         )
@@ -95,7 +94,7 @@ class InputParser(object):
         exclusions = parser.add_mutually_exclusive_group()
 
         exclusions.add_argument(
-            '-e', dest='exclusions', required=False,
+            '-e', dest='exclusion', required=False,
             help='Specify an exclusion to remove from any target lists.'
         )
 
@@ -105,6 +104,12 @@ class InputParser(object):
                  'May be a file or URL to listing',
             metavar="FILE",
             type=lambda x: InputHelper.process_targets(parser, x)
+        )
+
+        parser.add_argument(
+            '-q', dest='query', required=False,
+            help="Specify a resolver query to use (default:dnsvalidator)",
+            default="dnsvalidator"
         )
 
         parser.add_argument(

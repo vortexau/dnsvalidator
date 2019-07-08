@@ -41,8 +41,7 @@ def main():
             thisserver["goodip"] = str(rr)
 
         try:
-            # todo: add random nonce to args
-            nxdomanswer = resolver.query('lkjhuihuifr.' + rootdomain, 'A')
+            nxdomanswer = resolver.query(arguments.query + rootdomain, 'A')
             thisserver["nxdomain"] = False
         except dns.resolver.NXDOMAIN:
             thisserver["nxdomain"] = True
