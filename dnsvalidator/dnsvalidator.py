@@ -24,22 +24,22 @@ def main():
     # Perform resolution on each of the 'baselines'
     for baseline in baselines:
         output.terminal(Level.INFO, baseline, "resolving baseline")
-        thisserver = {}
+        baseline_server = {}
 
         resolver = dns.resolver.Resolver(configure=False)
         resolver.nameservers = [baseline]
         goodanswer = resolver.query(arguments.rootdomain, 'A')
 
         for rr in goodanswer:
-            thisserver["goodip"] = str(rr)
+            baseline_server["goodip"] = str(rr)
 
         try:
             nxdomanswer = resolver.query(arguments.query + arguments.rootdomain, 'A')
-            thisserver["nxdomain"] = False
+            baseline_server["nxdomain"] = False
         except dns.resolver.NXDOMAIN:
-            thisserver["nxdomain"] = True
+            baseline_server["nxdomain"] = True
 
-        responses[baseline] = thisserver
+        responses[baseline] = baseline_server
 
     # loop through the list
     for server in InputHelper.return_targets(arguments):

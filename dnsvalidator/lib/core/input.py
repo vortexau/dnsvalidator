@@ -102,7 +102,6 @@ class InputParser(object):
             '-eL', dest='exclusions_list', required=False,
             help='Specify a list of exclusions to avoid resolving. '
                  'May be a file or URL to listing',
-            metavar="FILE",
             type=lambda x: InputHelper.process_targets(parser, x)
         )
 
@@ -110,7 +109,6 @@ class InputParser(object):
             '-o', dest='output', required=False,
             help='Destination file to write output to.'
         )
-
 
         parser.add_argument(
             '-r', dest='rootdomain', required=False,
