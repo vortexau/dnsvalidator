@@ -22,7 +22,6 @@ def main():
     baselines = ["1.1.1.1", "8.8.8.8", "9.9.9.9"]
 
     updatedlist = "resolvers.txt"
-    rootdomain = "unisa.edu.au"
 
     validservers = []
 
@@ -41,7 +40,7 @@ def main():
             thisserver["goodip"] = str(rr)
 
         try:
-            nxdomanswer = resolver.query(arguments.query + rootdomain, 'A')
+            nxdomanswer = resolver.query(arguments.query + arguments.rootdomain, 'A')
             thisserver["nxdomain"] = False
         except dns.resolver.NXDOMAIN:
             thisserver["nxdomain"] = True
@@ -66,7 +65,7 @@ def main():
         resolver.nameservers = [server]
 
         try:
-            answer = resolver.query(rootdomain, 'A')
+            answer = resolver.query(arguments.rootdomain, 'A')
         except:
             continue
 
@@ -81,7 +80,7 @@ def main():
                 resolvematches += 1
 
         try:
-            nxanswer = resolver.query('lkjlkjqqewdw.' + rootdomain, 'A')
+            nxanswer = resolver.query('lkjlkjqqewdw.' + arguments.rootdomain, 'A')
         except dns.resolver.NXDOMAIN:
             gotnxdomain = True
         except:

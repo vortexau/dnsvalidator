@@ -107,6 +107,12 @@ class InputParser(object):
         )
 
         parser.add_argument(
+            '-r', dest='rootdomain', required=False,
+            help="Specify a root domain to compare to (default:",
+            default="unisa.edu.au"
+        )
+
+        parser.add_argument(
             '-q', dest='query', required=False,
             help="Specify a resolver query to use (default:dnsvalidator)",
             default="dnsvalidator"
