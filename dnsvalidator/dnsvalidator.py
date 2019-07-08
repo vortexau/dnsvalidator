@@ -5,8 +5,8 @@ import dns.resolver
 import re
 import sys
 
-from dnslistmaint.dnsvalidator.lib.core.input import InputParser, InputHelper
-from dnslistmaint.dnsvalidator.lib.core.output import OutputHelper, Level
+from .lib.core.input import InputParser, InputHelper
+from .lib.core.output import OutputHelper, Level
 
 
 def main():
