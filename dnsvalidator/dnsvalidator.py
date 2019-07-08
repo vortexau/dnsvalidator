@@ -60,6 +60,7 @@ def main():
         output.terminal(Level.VERBOSE, server, "starting check")
         server = server.strip()
 
+        # todo: move into own method
         # Skip if not IPv4
         valid = re.match("^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", server)
         if not valid:
