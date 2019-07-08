@@ -49,7 +49,9 @@ class InputHelper(object):
             for item in arguments.target_list:
                 targets.add(item)
 
-        if arguments.exclusions:
+        if arguments.exclusion:
+            exclusions.add(arguments.exclusion)
+        else:
             for item in arguments.exclusions:
                 exclusions.add(item)
 
