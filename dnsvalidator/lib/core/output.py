@@ -14,6 +14,7 @@ class OutputHelper(object):
         self.verbose = arguments.verbose
         self.silent = arguments.silent
         self.seperator = "=============================================="
+        self.silent = arguments.silent
 
     def print_banner(self):
         if self.silent:
@@ -44,21 +45,20 @@ class OutputHelper(object):
            'leader': leader
         }
 
-        # We can only reach this point if verbose is set to true
-        # since this is a mutually exclusive group with silent,
-        # we don't need to do silent checks on the first branch in
-        # this conditional and can treat the first `if` as if (hah)
-        # it will only be executed when verbose is in effect.
+        # print accepted hosts in silent mode and ignore all other content
+        if self.silent:
+            if level == 2:
+                print(target)
+            return
+
+        # allows for leader/message printing in verbose mode without a target
         if target == 0:
             template = '[{time}] {leader} {message}'
-        # if silent is set, print accepted targets only
-        elif target == 2 and self.arguments.silent:
-            template = '{target}'
         else:
             template = '[{time}] {leader} [{target}] {message}'
-            
-        print(template.format(**format_args))
 
+        print(template.format(**format_args))
+            
 
 class Level(IntEnum):
     VERBOSE = 0

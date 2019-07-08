@@ -5,6 +5,7 @@ import dns.resolver
 import re
 import sys
 import os
+import signal
 
 from .lib.core.input import InputParser, InputHelper
 from .lib.core.output import OutputHelper, Level
