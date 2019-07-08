@@ -13,7 +13,7 @@ class OutputHelper(object):
 
         self.verbose = arguments.verbose
         self.silent = arguments.silent
-        self.seperator = "=============================================="
+        self.seperator = "======================================================="
         self.silent = arguments.silent
 
     def print_banner(self):
@@ -21,7 +21,8 @@ class OutputHelper(object):
             return
 
         print(self.seperator)
-        print("dnsvalidator v%s\tby James McLean (@vortexau) & Michael Skelton (@codingo_)" % __version__)
+        print("dnsvalidator v%s\tby James McLean (@vortexau) "
+              "\n                \t& Michael Skelton (@codingo_)" % __version__)
         print(self.seperator)
 
     def terminal(self, level, target, message=""):

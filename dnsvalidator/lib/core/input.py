@@ -51,8 +51,8 @@ class InputHelper(object):
 
         if arguments.exclusion:
             exclusions.add(arguments.exclusion)
-        else:
-            for item in arguments.exclusions:
+        elif arguments.exclusions_list:
+            for item in arguments.exclusions_list:
                 exclusions.add(item)
 
         # difference operation
