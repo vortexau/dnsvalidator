@@ -41,11 +41,16 @@ class OutputHelper(object):
            'time': strftime("%H:%M:%S", localtime()),
            'target': target,
            'message': message,
-            'leader':leader
+           'leader': leader
         }
 
+        # print verbose only if silent wasn't in use
+        # this is required as code can send verbose messages even
+        # if the verbose flag is not currently set which bypasses
+        # the mutually exclusive group on .core.input
         if target == 0 and not self.arguments.silent:
             template = '[{time}] {leader} {message}'
+        # if silent is set, print accepted targets only
         elif target == 2 and self.arguments.silent:
             template = '{target}'
         else:
