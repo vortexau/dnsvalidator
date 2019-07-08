@@ -57,7 +57,7 @@ def main():
         responses[baseline] = thisserver
 
     # loop through the list
-    for server in servers:
+    for server in InputHelper.return_targets(arguments):
         output.terminal(Level.VERBOSE, server, "starting check")
         server = server.strip()
 

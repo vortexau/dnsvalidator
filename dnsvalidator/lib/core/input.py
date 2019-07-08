@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import os.path
 import requests
 from urllib.parse import urlparse
@@ -10,12 +12,12 @@ class InputHelper(object):
         targets = set()
 
         # if target is a URL and not a file path
-        if urlparse.urlparse:
+        if urlparse(arg):
             items = requests.get(arg)
             for item in items.text.split():
                 targets.add(item)
+            return targets
 
-        # if target is a local file
         if not os.path.exists(arg):
             parser.error("The file %s does not exist or is not a valid URL!" % arg)
         else:
@@ -44,10 +46,12 @@ class InputHelper(object):
         if arguments.target:
             targets.add(arguments.target)
         else:
-            targets.add(arguments.targets)
+            for item in arguments.target_list:
+                targets.add(item)
 
         if arguments.exclusions:
-            exclusions.add(arguments.exclusions)
+            for item in arguments.exclusions:
+                exclusions.add(item)
 
         # difference operation
         targets -= exclusions
@@ -80,7 +84,7 @@ class InputParser(object):
             '-tL', dest='target_list', required=False,
             help='Specify a list of target DNS servers to try to resolve. '
                  'May be a file, or URL to listing',
-            metavar="FILE",
+            #metavar="FILE",
             default="https://public-dns.info/nameservers.txt",
             type=lambda x: InputHelper.process_targets(parser, x)
         )
