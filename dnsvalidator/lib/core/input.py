@@ -1,60 +1,61 @@
 import os.path
+import requests
+from urllib.parse import urlparse
 from argparse import ArgumentParser
-from netaddr import IPNetwork, IPRange, IPGlob
 
 
 class InputHelper(object):
     @staticmethod
-    def readable_file(parser, arg):
+    def process_targets(parser, arg):
+        targets = set()
+
+        # if target is a URL and not a file path
+        if urlparse.urlparse:
+            items = requests.get(arg)
+            for item in items.text.split():
+                targets.add(item)
+
+        # if target is a local file
         if not os.path.exists(arg):
-            parser.error("The file %s does not exist!" % arg)
+            parser.error("The file %s does not exist or is not a valid URL!" % arg)
         else:
-            return open(arg, 'r')  # return an open file handle
+            items = open(arg, 'r')
+            for item in items.strip():
+                targets.add(item.strip())
+
+        if len(targets) == 0:
+            raise Exception("No target provided, or empty target list")
+
+        return targets
 
     @staticmethod
     def check_positive(parser, arg):
-        ivalue = int(arg)
-        if ivalue <= 0:
+        i = int(arg)
+        if i <= 0:
             raise parser.ArgumentTypeError("%s is not a valid positive integer!" % arg)
 
         return arg
 
     @staticmethod
-    def _get_ips_from_range(ip_range):
-        ips = set()
-        ip_range = ip_range.split("-")
+    def return_targets(arguments):
+        targets = set()
+        exclusions = set()
 
-        # parsing the above structure into an array and then making
-        # into an IP address with the end value
-        end_ip = ".".join(ip_range[0].split(".")[0:-1]) + "." + ip_range[1]
+        if arguments.target:
+            targets.add(arguments.target)
+        else:
+            targets.add(arguments.targets)
 
-        # creating an IPRange object to get all IPs in between
-        range_obj = IPRange(ip_range[0], end_ip)
+        if arguments.exclusions:
+            exclusions.add(arguments.exclusions)
 
-        for ip in range_obj:
-            ips.add(str(ip))
+        # difference operation
+        targets -= exclusions
 
-        return ips
+        if len(targets) == 0:
+            raise Exception("No target remaining after removing all exceptions.")
 
-    @staticmethod
-    def _get_ips_from_glob(glob_ips):
-        ip_glob = IPGlob(glob_ips)
-
-        ips = set()
-
-        for ip in ip_glob:
-            ips.add(str(ip))
-
-        return ips
-
-    @staticmethod
-    def _get_cidr_to_ips(cidr_range):
-        ips = set()
-
-        for ip in IPNetwork(cidr_range):
-            ips.add(str(ip))
-
-        return ips
+        return targets
 
 
 class InputParser(object):
@@ -68,19 +69,20 @@ class InputParser(object):
     def setup_parser():
         parser = ArgumentParser()
 
-        targets = parser.add_mutually_exclusive_group(required=True)
+        targets = parser.add_mutually_exclusive_group(required=False)
 
         targets.add_argument(
             '-t', dest='target', required=False,
-            help='Specify a target or domain name either in comma format, '
-                 'CIDR notation, glob notation, or a single target.'
+            help='Specify a target DNS server to try resolving.'
         )
 
         targets.add_argument(
             '-tL', dest='target_list', required=False,
-            help='Specify a list of targets or domain names.',
+            help='Specify a list of target DNS servers to try to resolve. '
+                 'May be a file, or URL to listing',
             metavar="FILE",
-            type=lambda x: InputHelper.readable_file(parser, x)
+            default="https://public-dns.info/nameservers.txt",
+            type=lambda x: InputHelper.process_targets(parser, x)
         )
 
         # exclusions group
@@ -88,15 +90,15 @@ class InputParser(object):
 
         exclusions.add_argument(
             '-e', dest='exclusions', required=False,
-            help='Specify an exclusion either in comma format, '
-                 'CIDR notation, or a single target.'
+            help='Specify an exclusion to remove from any target lists.'
         )
 
         exclusions.add_argument(
             '-eL', dest='exclusions_list', required=False,
-            help='Specify a list of exclusions.',
+            help='Specify a list of exclusions to avoid resolving. '
+                 'May be a file or URL to listing',
             metavar="FILE",
-            type=lambda x: InputHelper.readable_file(parser, x)
+            type=lambda x: InputHelper.process_targets(parser, x)
         )
 
         parser.add_argument(

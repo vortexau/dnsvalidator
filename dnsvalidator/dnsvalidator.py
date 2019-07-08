@@ -16,23 +16,22 @@ def main():
     arguments = parser.parse(sys.argv[1:])
 
     output = OutputHelper(arguments)
-
     output.print_banner()
 
     # todo: move this into CLI options or a config file
     baselines = ["1.1.1.1", "8.8.8.8", "9.9.9.9"]
 
-    dnsserverlist = "https://public-dns.info/nameservers.txt"
+    #dnsserverlist = "https://public-dns.info/nameservers.txt"
     updatedlist = "resolvers.txt"
     rootdomain = "unisa.edu.au"
 
     validservers = []
 
     # download the latest DNS list
-    r = requests.get(dnsserverlist)
-    data = r.text
+    #r = requests.get(dnsserverlist)
+    #data = r.text
 
-    servers = data.split()
+    #servers = data.split()
 
     responses = {}
 

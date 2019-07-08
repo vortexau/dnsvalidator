@@ -28,6 +28,12 @@ class OutputHelper(object):
         if level == 0 and not self.verbose:
             return
 
+        # print accepted hosts in silent mode and ignore all other content
+        if self.silent:
+            if level == 2:
+                print(target)
+            return
+
         formatting = {
             0: Color('{autoblue}[VERBOSE]{/autoblue}'),
             1: Color('{autoyellow}[INFO]{/autoyellow}'),
@@ -44,12 +50,6 @@ class OutputHelper(object):
            'message': message,
            'leader': leader
         }
-
-        # print accepted hosts in silent mode and ignore all other content
-        if self.silent:
-            if level == 2:
-                print(target)
-            return
 
         # allows for leader/message printing in verbose mode without a target
         if target == 0:
