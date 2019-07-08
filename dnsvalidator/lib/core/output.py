@@ -44,8 +44,10 @@ class OutputHelper(object):
             'leader':leader
         }
 
-        if target == 0:
+        if target == 0 and not self.arguments.silent:
             template = '[{time}] {leader} {message}'
+        elif target == 2 and self.arguments.silent:
+            template = '{target}'
         else:
             template = '[{time}] {leader} [{target}] {message}'
             
