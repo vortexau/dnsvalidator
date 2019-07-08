@@ -5,6 +5,8 @@ Maintains a list of DNS servers by verifying them against baseline servers, and 
 [![Twitter](https://img.shields.io/badge/twitter-@vortexau-blue.svg)](https://twitter.com/vortexau)
 [![Twitter](https://img.shields.io/badge/twitter-@codingo__-blue.svg)](https://twitter.com/codingo_) 
 
+![DNSValidator](https://github.com/vortexau/dnsvalidator/blob/master/.github/dnsvalidator.png)
+
 # Usage
 
 | Argument   | Description                                                                                                  |
