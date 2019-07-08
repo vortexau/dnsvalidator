@@ -14,6 +14,8 @@ Maintains a list of DNS servers by verifying them against baseline servers, and 
 | -tL        | Specify a list of targets or a URL to a list of targets |
 | -e         | Specify a target exclusion. |
 | -eL        | Specify a list of targets or a URL to a list of targets to exclude. |
+| -r         | Specify a root domain to compare to. |
+| -q         | Specify a resolver query to use (default:dnsvalidator) |
 | -threads   | Specify the maximum number of threads to run at any one time (DEFAULT:5)                                     |
 | -timeout   | Specify a timeout value in seconds for any single thread (DEFAULT:600)                                       |
 | -o         | Specify an output file to write successful output to. |
