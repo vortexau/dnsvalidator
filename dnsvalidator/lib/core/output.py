@@ -2,6 +2,7 @@ from colorclass import Color
 from colorclass import disable_all_colors, enable_all_colors, is_enabled
 from time import localtime, strftime
 from enum import IntEnum
+
 from dnsvalidator.lib.core.__version__ import __version__
 
 

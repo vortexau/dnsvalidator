@@ -1,7 +1,6 @@
+import os.path
 from argparse import ArgumentParser
 from netaddr import IPNetwork, IPRange, IPGlob
-from dnslistmaint.lib.core.output import OutputHelper, Level
-import os.path
 
 
 class InputHelper(object):
@@ -132,3 +131,4 @@ class InputParser(object):
         )
 
         return parser
+

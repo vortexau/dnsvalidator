@@ -4,6 +4,7 @@ import requests
 import dns.resolver
 import re
 import sys
+import os
 
 from .lib.core.input import InputParser, InputHelper
 from .lib.core.output import OutputHelper, Level
@@ -113,5 +114,15 @@ def main():
     output.terminal(Level.INFO, 0,
                     "Update finished. Wrote {size} servers".format(size=len(validservers)))
 
+
+# Declare signal handler to immediately exit on KeyboardInterrupt
+def signal_handler(signal, frame):
+    os._exit(0)
+
+
+signal.signal(signal.SIGINT, signal_handler)
+
+
 if __name__ == "__main__":
     main()
+
