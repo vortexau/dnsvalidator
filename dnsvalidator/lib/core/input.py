@@ -4,6 +4,8 @@ import os
 import requests
 from urllib.parse import urlparse
 from argparse import ArgumentParser
+import argparse
+
 
 
 class InputHelper(object):
@@ -105,10 +107,10 @@ class InputParser(object):
             type=lambda x: InputHelper.process_targets(parser, x)
         )
 
-        parser.add_argument(
-            '-o', dest='output', required=False,
-            help='Destination file to write output to.'
-        )
+        parser.add_argument('-o', '--output',
+                            action='store', nargs='?',
+                            dest='output',
+                            help='Destination file to write successful DNS validations to.')
 
         parser.add_argument(
             '-r', dest='rootdomain', required=False,

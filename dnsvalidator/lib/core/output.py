@@ -15,6 +15,7 @@ class OutputHelper(object):
         self.silent = arguments.silent
         self.seperator = "======================================================="
         self.silent = arguments.silent
+        self.output = arguments.output
 
     def print_banner(self):
         if self.silent:
@@ -59,6 +60,11 @@ class OutputHelper(object):
             template = '[{time}] {leader} [{target}] {message}'
 
         print(template.format(**format_args))
+
+        if self.output and level == 2:
+            f = open(self.output, 'a')
+            f.writelines("\n" + target)
+            f.close()
             
 
 class Level(IntEnum):
