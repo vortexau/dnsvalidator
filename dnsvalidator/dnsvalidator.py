@@ -93,12 +93,12 @@ def main():
 
     # todo: move into proper class
     # write the content of the list to the disk for use
-    if arguments.output:
-        with open(arguments.output, "w+") as resolvers:
-            resolvers.write(valid_servers)
-            output.terminal(Level.INFO, 0,
-                            "Update finished. Wrote {size} servers".format(size=len(valid_servers)))
-        return
+    #if arguments.output:
+    #    with open(arguments.output, "w+") as resolvers:
+    #        resolvers.write(valid_servers)
+    #        output.terminal(Level.INFO, 0,
+    #                        "Update finished. Wrote {size} servers".format(size=len(valid_servers)))
+    #    return
     output.terminal(Level.INFO, 0, "Finished. Discovered {size} servers".format(size=len(valid_servers)))
 
 # Declare signal handler to immediately exit on KeyboardInterrupt
