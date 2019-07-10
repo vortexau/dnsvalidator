@@ -5,10 +5,18 @@ import re
 import sys
 import os
 import signal
+import random
+import string
 
 from .lib.core.input import InputParser, InputHelper
 from .lib.core.output import OutputHelper, Level
 
+
+def rand():
+    return ''.join(random.choice(string.ascii_lowercase) for i in range(10))
+
+def resolve():
+    pass
 
 def main():
     parser = InputParser()
@@ -17,6 +25,8 @@ def main():
     output = OutputHelper(arguments)
     output.print_banner()
     baselines = ["1.1.1.1", "8.8.8.8", "9.9.9.9"]
+
+    positivebaselines = ["bet365.com", "telegram.com"]
 
     valid_servers = []
     responses = {}
@@ -32,6 +42,13 @@ def main():
 
         for rr in goodanswer:
             baseline_server["goodip"] = str(rr)
+
+        # checks for often poisoned domains
+        baseline_server["pos"] = {} 
+        for positivebaseline in positivebaselines:
+            posanswer = resolver.query(positivebaseline, 'A')
+            for rr in posanswer:
+                baseline_server["pos"][positivebaseline] = str(rr)
 
         try:
             nxdomanswer = resolver.query(arguments.query + arguments.rootdomain, 'A')
@@ -58,6 +75,31 @@ def main():
         resolver = dns.resolver.Resolver(configure=False)
         resolver.nameservers = [server]
 
+        # Try to resolve our positive baselines before going any further
+        poisoning = False
+        for positivebaseline in positivebaselines:
+            # make sure random subdomains are NXDOMAIN
+            try:
+                positivehn = "{rand}.{domain}".format(
+                        rand=rand(), 
+                        domain=positivebaseline
+                )
+                posanswer = resolver.query(positivehn, 'A')
+
+                # nxdomain exception was not thrown, we got records when we shouldn't have. 
+                # Skip the server.
+                poisoning = True
+                break
+            except dns.resolver.NXDOMAIN:
+                pass
+            except:
+                output.terminal(Level.ERROR, server, "Error when checking for DNS poisoning, passing")
+
+        if poisoning:
+            output.terminal(Level.ERROR, server, "DNS poisoning detected, passing")
+            continue
+
+        # Check our baseline against this server
         try:
             answer = resolver.query(arguments.rootdomain, 'A')
         except:
@@ -73,8 +115,15 @@ def main():
             if responses[goodresponse]["goodip"] == ans:
                 resolvematches += 1
 
+
+
+        # Check for nxdomain on the rootdomain we're checking
         try:
-            nxanswer = resolver.query('lkjlkjqqewdw.' + arguments.rootdomain, 'A')
+            nxquery = "{rand}.{rootdomain}".format(
+                rand=rand(), 
+                rootdomain=arguments.rootdomain
+            )
+            nxanswer = resolver.query(nxquery, 'A')
         except dns.resolver.NXDOMAIN:
             gotnxdomain = True
         except:
