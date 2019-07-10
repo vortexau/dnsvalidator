@@ -1,11 +1,20 @@
 FROM python:3.7.3-alpine3.9
 
-RUN mkdir /dnslistmaint
-COPY dnsvalidator /dnsvalidator/dnsvalidator.py
-COPY requirements.txt /dnsvalidator/requirements.txt
+RUN apk add --no-cache shadow bash && \
+    mkdir /dnsvalidator && \
+    useradd --create-home --shell /sbin/nologin dnsvalidator
 
-RUN pip install -r /dnsvalidator/requirements.txt
+COPY . /dnsvalidator/
 
-RUN chmod +x /dnslistmaint/dnslistmaint.py
+WORKDIR /dnsvalidator/
 
-ENTRYPOINT ["/dnslistmaint/dnslistmaint.py"]
+RUN ls -laR
+
+RUN chown -R dnsvalidator:dnsvalidator /dnsvalidator && \
+    python3 setup.py install
+
+USER dnsvalidator
+
+RUN ls -la /usr/local/bin/dnsvalidator
+
+ENTRYPOINT ["/usr/local/bin/dnsvalidator"]

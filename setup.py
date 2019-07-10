@@ -10,12 +10,6 @@ def dependencies(imported_file):
 
 
 with open("README.md") as file:
-    num_installed = False
-    try:
-        import numpy
-        num_installed = True
-    except ImportError:
-        pass
     setup(
         name="DNSValidator",
         license="GPLv3",
@@ -33,7 +27,6 @@ with open("README.md") as file:
             ]
         },
         install_requires=dependencies('requirements.txt'),
-        setup_requires=['pytest-runner',
-                        '' if num_installed else 'numpy==1.12.0'],
+        setup_requires=['pytest-runner'],
         tests_require=dependencies('test-requirements.txt'),
         include_package_data=True)
