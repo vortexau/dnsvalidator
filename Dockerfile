@@ -8,13 +8,9 @@ COPY . /dnsvalidator/
 
 WORKDIR /dnsvalidator/
 
-RUN ls -laR
-
 RUN chown -R dnsvalidator:dnsvalidator /dnsvalidator && \
     python3 setup.py install
 
 USER dnsvalidator
-
-RUN ls -la /usr/local/bin/dnsvalidator
 
 ENTRYPOINT ["/usr/local/bin/dnsvalidator"]
