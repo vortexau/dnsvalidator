@@ -27,6 +27,7 @@ def main():
     baselines = ["1.1.1.1", "8.8.8.8", "9.9.9.9"]
 
     positivebaselines = ["bet365.com", "telegram.com"]
+    nxdomainchecks = ["facebook.com", "paypal.com","google.com","bet365.com","telegram.com","wikileaks.com"]
 
     valid_servers = []
     responses = {}
@@ -77,22 +78,23 @@ def main():
 
         # Try to resolve our positive baselines before going any further
         poisoning = False
-        for positivebaseline in positivebaselines:
+        for nxdomaincheck in nxdomainchecks:
             # make sure random subdomains are NXDOMAIN
             try:
                 positivehn = "{rand}.{domain}".format(
                         rand=rand(), 
-                        domain=positivebaseline
+                        domain=nxdomaincheck
                 )
                 posanswer = resolver.query(positivehn, 'A')
 
+                print(positivehn)
                 # nxdomain exception was not thrown, we got records when we shouldn't have. 
                 # Skip the server.
                 poisoning = True
                 break
             except dns.resolver.NXDOMAIN:
                 pass
-            except:
+            except Exception as e:
                 output.terminal(Level.ERROR, server, "Error when checking for DNS poisoning, passing")
 
         if poisoning:
