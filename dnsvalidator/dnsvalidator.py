@@ -87,7 +87,6 @@ def main():
                 )
                 posanswer = resolver.query(positivehn, 'A')
 
-                print(positivehn)
                 # nxdomain exception was not thrown, we got records when we shouldn't have. 
                 # Skip the server.
                 poisoning = True
