@@ -150,7 +150,6 @@ def main():
     #        output.terminal(Level.INFO, 0,
     #                        "Update finished. Wrote {size} servers".format(size=len(valid_servers)))
     #    return
-    print("all done")
     output.terminal(Level.INFO, 0, "Finished. Discovered {size} servers".format(
         size=len(valid_servers)))
 
