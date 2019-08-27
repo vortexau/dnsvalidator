@@ -62,12 +62,8 @@ class OutputHelper(object):
         print(template.format(**format_args))
 
         if self.output and level == 2:
-            if os.path.exists(self.output):
-                print("###### appending to file")
-                f = open(self.output, 'a')
-            else:
-                print("##### making new file")
-                f = open(self.output, 'w')
+            print(self.output)
+            f = open(self.output, 'a+')
 
             f.writelines("\n" + target)
             f.close()
