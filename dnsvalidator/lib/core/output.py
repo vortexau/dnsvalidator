@@ -63,8 +63,10 @@ class OutputHelper(object):
 
         if self.output and level == 2:
             if os.path.exists(self.output):
+                print("###### appending to file")
                 f = open(self.output, 'a')
             else:
+                print("##### making new file")
                 f = open(self.output, 'w')
 
             f.writelines("\n" + target)
