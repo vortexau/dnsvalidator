@@ -108,7 +108,6 @@ class InputParser(object):
         )
 
         parser.add_argument('-o', '--output',
-                            action='store', nargs='?',
                             dest='output',
                             help='Destination file to write successful DNS validations to.')
 
