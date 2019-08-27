@@ -62,9 +62,19 @@ class OutputHelper(object):
         print(template.format(**format_args))
 
         if self.output and level == 2:
-            f = open(self.output, 'a')
+	    if os.path.exists(self.output):
+                f = open(self.output, 'a')
+	    else:
+                f = open(self.output, 'w')
+
             f.writelines("\n" + target)
             f.close()
+
+
+
+highscore = open(filename,append_write)
+highscore.write("Username: " + player + '\n')
+highscore.close()
             
 
 class Level(IntEnum):
