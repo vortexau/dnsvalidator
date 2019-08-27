@@ -7,7 +7,6 @@ from argparse import ArgumentParser
 import argparse
 
 
-
 class InputHelper(object):
     @staticmethod
     def process_targets(parser, arg):
@@ -21,7 +20,8 @@ class InputHelper(object):
             return targets
 
         if not os.path.exists(arg):
-            parser.error("The file %s does not exist or is not a valid URL!" % arg)
+            parser.error(
+                "The file %s does not exist or is not a valid URL!" % arg)
         else:
             items = open(arg, 'r')
             for item in items.strip():
@@ -36,7 +36,8 @@ class InputHelper(object):
     def check_positive(parser, arg):
         i = int(arg)
         if i <= 0:
-            raise parser.ArgumentTypeError("%s is not a valid positive integer!" % arg)
+            raise parser.ArgumentTypeError(
+                "%s is not a valid positive integer!" % arg)
 
         return arg
 
@@ -44,7 +45,6 @@ class InputHelper(object):
     def return_targets(arguments):
         targets = set()
         exclusions = set()
-
         if arguments.target:
             targets.add(arguments.target)
         else:
@@ -61,8 +61,8 @@ class InputHelper(object):
         targets -= exclusions
 
         if len(targets) == 0:
-            raise Exception("No target remaining after removing all exceptions.")
-
+            raise Exception(
+                "No target remaining after removing all exceptions.")
         return targets
 
 
@@ -156,4 +156,3 @@ class InputParser(object):
         )
 
         return parser
-
