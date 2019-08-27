@@ -32,3 +32,25 @@ DNS Validator's approach is different to other DNS query validation tools. This 
 | --no-color | If set then any foreground or background colours will be stripped out                                        |
 | --silent   | If set then only successfully resolved servers will be displayed and banners and other information will be redacted. |
 | -v         | If set then verbose output will be displayed in the terminal.                                                 |
+
+# Examples:
+
+CLI:
+
+```
+$ dnsvalidator -tL https://public-dns.info/nameservers.txt -threads 20 -o resolvers.txt
+```
+
+Docker:
+
+Build 
+
+```
+docker build -t dnsvalidator .
+```
+
+Run:
+
+```
+docker run -v $(pwd):/dnsvalidator/output -t dnsvalidator -tL https://public-dns.info/nameservers.txt -threads 20 -o /dnsvalidator/output/resolvers.txt
+```
