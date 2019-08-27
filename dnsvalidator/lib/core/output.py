@@ -62,9 +62,7 @@ class OutputHelper(object):
         print(template.format(**format_args))
 
         if self.output and level == 2:
-            print(self.output)
             f = open(self.output, 'a+')
-
             f.writelines("\n" + target)
             f.close()
 
