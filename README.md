@@ -7,6 +7,14 @@ Maintains a list of DNS servers by verifying them against baseline servers, and 
 
 ![DNSValidator](https://github.com/vortexau/dnsvalidator/blob/master/.github/dnsvalidator.png)
 
+DNS Validator's approach is different to other DNS query validation tools. This tool performs multiple validation steps on each resolver:
+
+* Baselines non-geolocated domain names against "trusted" public DNS resolvers, `1.1.1.1`, `8.8.8.8` and `9.9.9.9` 
+  * For each resolver being tested DNS Validator ensures that each baselined domain name resolves to the same IP Address.
+    * Servers that return an answer that differs from the baseline are immediately skipped
+* Performs DNS lookup of known commonly spoofed DNS addresses to ensure NXDOMAIN is returned when expected.
+  * Resolvers that do not return NXDOMAIN for random subdomains of known target domains are immediately skipped.
+
 # Usage
 
 | Argument   | Description                                                                                                  |
