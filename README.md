@@ -33,6 +33,13 @@ DNS Validator's approach is different to other DNS query validation tools. This 
 | --silent   | If set then only successfully resolved servers will be displayed and banners and other information will be redacted. |
 | -v         | If set then verbose output will be displayed in the terminal.                                                 |
 
+# Setup
+Install using:
+```
+$ python3 setup.py install
+```
+Dependencies will then be installed and DNS Validator will be added to your path as `dnsvalidator`.
+
 # Examples:
 
 ## CLI:
