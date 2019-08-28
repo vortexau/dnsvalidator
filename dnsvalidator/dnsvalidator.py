@@ -116,7 +116,12 @@ def main():
         resolver.nameservers = [baseline]
 
         # Check our baseline against this server
-        goodanswer = resolver.query(arguments.rootdomain, 'A')
+        try:
+            goodanswer = resolver.query(arguments.rootdomain, 'A')
+        except dns.exception.Timeout:
+            output.terminal(Level.ERROR, baseline,
+                    "DNS Timeout for baseline server. Fatal")
+            sys.exit(1)
 
         for rr in goodanswer:
             baseline_server["goodip"] = str(rr)
@@ -135,6 +140,10 @@ def main():
             baseline_server["nxdomain"] = False
         except dns.resolver.NXDOMAIN:
             baseline_server["nxdomain"] = True
+        except dns.exception.Timeout:
+            output.terminal(Level.ERROR, baseline,
+                    "DNS Timeout for baseline server. Fatal")
+            sys.exit(1)
 
         responses[baseline] = baseline_server
 
