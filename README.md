@@ -24,7 +24,7 @@ DNS Validator's approach is different to other DNS query validation tools. This 
 | -tL        | Specify a list of targets or a URL to a list of targets |
 | -e         | Specify a target exclusion. |
 | -eL        | Specify a list of targets or a URL to a list of targets to exclude. |
-| -r         | Specify a root domain to compare to. |
+| -r         | Specify a root domain to compare to. Must be non-geolocated or most resolvers will fail. |
 | -q         | Specify a resolver query to use (default:dnsvalidator) |
 | -threads   | Specify the maximum number of threads to run at any one time (DEFAULT:5)                                     |
 | -timeout   | Specify a timeout value in seconds for any single thread (DEFAULT:600)                                       |
@@ -35,13 +35,13 @@ DNS Validator's approach is different to other DNS query validation tools. This 
 
 # Examples:
 
-CLI:
+## CLI:
 
 ```
 $ dnsvalidator -tL https://public-dns.info/nameservers.txt -threads 20 -o resolvers.txt
 ```
 
-Docker:
+## Docker:
 
 Build 
 
