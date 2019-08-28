@@ -1,5 +1,5 @@
 # DNS Validator
-Maintains a list of DNS servers by verifying them against baseline servers, and ensuring accurate responses.
+Maintains a list of IPv4 DNS servers by verifying them against baseline servers, and ensuring accurate responses.
 
 [![Python 3.2|3.6](https://img.shields.io/badge/python-3.2|3.6-green.svg)](https://www.python.org/) [![License](https://img.shields.io/badge/license-GPL3-_red.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html) 
 [![Twitter](https://img.shields.io/badge/twitter-@vortexau-blue.svg)](https://twitter.com/vortexau)
@@ -44,10 +44,7 @@ Dependencies will then be installed and DNS Validator will be added to your path
 
 ## CLI:
 
-```
-$ git clone https://github.com/vortexau/dnsvalidator
-$ cd dnsvalidator
-$ python3 setup.py install
+```bash
 $ dnsvalidator -tL https://public-dns.info/nameservers.txt -threads 20 -o resolvers.txt
 ```
 
@@ -55,12 +52,18 @@ $ dnsvalidator -tL https://public-dns.info/nameservers.txt -threads 20 -o resolv
 
 Build 
 
-```
-docker build -t dnsvalidator .
+```bash
+$ docker build -t dnsvalidator .
 ```
 
 Run:
 
+```bash
+$ docker run -v $(pwd):/dnsvalidator/output -t dnsvalidator -tL https://public-dns.info/nameservers.txt -threads 20 -o /dnsvalidator/output/resolvers.txt
 ```
-docker run -v $(pwd):/dnsvalidator/output -t dnsvalidator -tL https://public-dns.info/nameservers.txt -threads 20 -o /dnsvalidator/output/resolvers.txt
-```
+
+# Caveats
+
+* Only IPv4 DNS Resolvers are validated at the current time. IPv6 resolvers are skipped.
+* Root domains used for baseline tests must not be geolocated; specifically they must return the same IP address regardless of the location on the planet they are resolved from. Domains such as `google.com` or `facebook.com` (and many others) are not suitable for baselines, as they return a geo-located IP address when resolved.
+  * Using a root domain that is geo-located will result in only resolvers local to the user being returned as valid.
