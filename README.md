@@ -38,6 +38,9 @@ DNS Validator's approach is different to other DNS query validation tools. This 
 ## CLI:
 
 ```
+$ git clone https://github.com/vortexau/dnsvalidator
+$ cd dnsvalidator
+$ python3 setup.py install
 $ dnsvalidator -tL https://public-dns.info/nameservers.txt -threads 20 -o resolvers.txt
 ```
 
