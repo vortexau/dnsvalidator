@@ -65,8 +65,14 @@ def resolve_address(server):
 
             # nxdomain exception was not thrown, we got records when we shouldn't have.
             # Skip the server.
-            output.terminal(Level.ERROR, server,
-                            "DNS poisoning detected, passing")
+            if arguments.poisoningslog:
+                output.terminal(Level.ERROR, server,
+                                "DNS poisoning detected, logging target to "
+                                + arguments.poisoningslog)
+                output.log_poisonings(server)
+            else:
+                output.terminal(Level.ERROR, server,
+                                "DNS poisoning detected, passing")
             return
         except dns.resolver.NXDOMAIN:
             pass
