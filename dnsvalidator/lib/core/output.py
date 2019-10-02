@@ -21,10 +21,10 @@ class OutputHelper(object):
         if self.silent:
             return
 
-        print(self.seperator)
+        print(self.seperator, flush=True)
         print("dnsvalidator v%s\tby James McLean (@vortexau) "
-              "\n                \t& Michael Skelton (@codingo_)" % __version__)
-        print(self.seperator)
+              "\n                \t& Michael Skelton (@codingo_)" % __version__, flush = True)
+        print(self.seperator, flush=True)
 
     def terminal(self, level, target, message=""):
         if level == 0 and not self.verbose:
@@ -33,7 +33,7 @@ class OutputHelper(object):
         # print accepted hosts in silent mode and ignore all other content
         if self.silent:
             if level == 2:
-                print(target)
+                print(target, flush = True)
             return
 
         formatting = {
@@ -59,7 +59,7 @@ class OutputHelper(object):
         else:
             template = '[{time}] {leader} [{target}] {message}'
 
-        print(template.format(**format_args))
+        print(template.format(**format_args), flush = True)
 
         if self.output and level == 2:
             f = open(self.output, 'a+')
