@@ -114,7 +114,7 @@ class InputParser(object):
         parser.add_argument(
             '-r', dest='rootdomain', required=False,
             help="Specify a root domain to compare to (default:",
-            default="unisa.edu.au"
+            default="bet365.com"
         )
 
         parser.add_argument(
