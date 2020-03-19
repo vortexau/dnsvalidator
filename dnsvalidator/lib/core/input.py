@@ -1,36 +1,63 @@
 #!/usr/bin/env python3
 
-import os
+import sys
 import requests
 from urllib.parse import urlparse
 from argparse import ArgumentParser
-import argparse
-
+from pathlib import Path
 
 class InputHelper(object):
     @staticmethod
     def process_targets(parser, arg):
-        targets = set()
-
-        # if target is a URL and not a file path
-        if urlparse(arg):
-            items = requests.get(arg)
-            for item in items.text.split():
-                targets.add(item)
-            return targets
-
-        if not os.path.exists(arg):
-            parser.error(
-                "The file %s does not exist or is not a valid URL!" % arg)
+        if InputHelper.validate_url(arg):
+            targets = InputHelper.process_url(parser, arg)
         else:
-            items = open(arg, 'r')
-            for item in items.strip():
-                targets.add(item.strip())
+            filename = InputHelper.validate_filename(parser, arg)
+            if filename:
+                targets = InputHelper.process_file(filename)
 
         if len(targets) == 0:
             raise Exception("No target provided, or empty target list")
 
         return targets
+
+    @staticmethod
+    def validate_url(string):
+        try:
+            result = urlparse(string)
+            # if there isn't a scheme, its probably not a URL we can reliably use
+            return result.scheme
+        except:
+            # assume its a file and let the os decide
+            return False
+
+    @staticmethod
+    def validate_filename(parser, arg):
+        filename_arg = Path(arg)
+        # sometimes we'll encounter ~ and ..
+        filename_resolved = filename_arg.expanduser().resolve()
+        if not filename_resolved.is_file():
+            parser.error("The file %s does not exist or is not a valid URL!" % arg)
+        else:
+            return str(filename_resolved)
+
+    @staticmethod
+    def process_url(parser, arg):
+        try:
+            items = requests.get(arg)
+        except:
+            e = sys.exc_info()[0]
+            parser.error(f"Tried to fetch {arg} but got {e} are you sure this is a valid URL?")
+
+        if items.status_code != 200:
+            parser.error(f"Tried to fetch {arg} but got HTTP {items.status_code} {items.reason}.")
+
+        return items.text.split()
+
+    @staticmethod
+    def process_file(arg):
+        with open(arg, 'r') as file:
+            return [line.rstrip('\n') for line in file]
 
     @staticmethod
     def check_positive(parser, arg):
@@ -64,7 +91,6 @@ class InputHelper(object):
             raise Exception(
                 "No target remaining after removing all exceptions.")
         return targets
-
 
 class InputParser(object):
     def __init__(self):
