@@ -5,7 +5,7 @@ Maintains a list of IPv4 DNS servers by verifying them against baseline servers,
 [![Twitter](https://img.shields.io/badge/twitter-@vortexau-blue.svg)](https://twitter.com/vortexau)
 [![Twitter](https://img.shields.io/badge/twitter-@codingo__-blue.svg)](https://twitter.com/codingo_) 
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/HYyL7p_OZ-E" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+![DNSValidator](https://github.com/vortexau/dnsvalidator/blob/master/.github/dnsvalidator.png)
 
 DNS Validator's approach is different to other DNS query validation tools. This tool performs multiple validation steps on each resolver:
 
