@@ -16,6 +16,7 @@ class OutputHelper(object):
         self.seperator = "======================================================="
         self.silent = arguments.silent
         self.output = arguments.output
+        self.poisoningslog = arguments.poisoningslog
 
     def print_banner(self):
         if self.silent:
@@ -65,6 +66,11 @@ class OutputHelper(object):
             f = open(self.output, 'a+')
             f.writelines("\n" + target)
             f.close()
+
+    def log_poisonings(self, target):
+        f = open(self.poisoningslog, 'a+')
+        f.writelines(target + "\n")
+        f.close()
 
 
 class Level(IntEnum):

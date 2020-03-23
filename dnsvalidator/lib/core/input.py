@@ -180,4 +180,8 @@ class InputParser(object):
                  'and other information will be redacted.'
         )
 
+        parser.add_argument(
+            '--log-poisonings', dest='poisoningslog',
+            help='Destination file to write detected poisoned DNS servers to. '
+        )
         return parser
