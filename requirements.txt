@@ -2,3 +2,4 @@ requests
 dnspython
 colorclass
 netaddr
+ipaddress

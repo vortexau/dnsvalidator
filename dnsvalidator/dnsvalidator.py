@@ -10,6 +10,7 @@ import string
 import threading
 import time
 import concurrent.futures
+from ipaddress import ip_address, IPv4Address
 
 
 from .lib.core.input import InputParser, InputHelper
@@ -40,12 +41,20 @@ goodip = ""
 valid_servers = []
 responses = {}
 
+from ipaddress import ip_address, IPv4Address
+
+def validIPAddress(IP):
+    try:
+        return "IPv4" if type(ip_address(IP)) is IPv4Address else "IPv6"
+    except ValueError:
+        return False
+
 
 def resolve_address(server):
     # Skip if not IPv4
-    valid = re.match("^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", server)
+    valid = validIPAddress(server)
     if not valid:
-        output.terminal(Level.VERBOSE, server, "skipping as not IPv4")
+        output.terminal(Level.VERBOSE, server, "skipping as not IP")
         return
 
     output.terminal(Level.INFO, server, "Checking...")
