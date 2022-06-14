@@ -30,8 +30,7 @@ arguments = parser.parse(sys.argv[1:])
 
 output = OutputHelper(arguments)
 output.print_banner()
-baselines = ["1.1.1.1", "8.8.8.8", "9.9.9.9"]
-
+baselines = ["1.1.1.1", "8.8.8.8"]
 
 positivebaselines = ["bet365.com", "telegram.com"]
 nxdomainchecks = ["facebook.com", "paypal.com", "google.com",
