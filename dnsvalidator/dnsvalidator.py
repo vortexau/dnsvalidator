@@ -106,7 +106,7 @@ def resolve_address(server):
         if responses[goodresponse]["nxdomain"] == gotnxdomain:
             nxdommatches += 1
 
-    if resolvematches == 3 and nxdommatches == 3:
+    if resolvematches == 2 and nxdommatches == 2:
         output.terminal(Level.ACCEPTED, server, "provided valid response")
         valid_servers.append(server)
     else:
