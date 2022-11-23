@@ -7,8 +7,6 @@ import re
 import signal
 import string
 import sys
-import threading
-import time
 
 import dns.resolver
 
@@ -163,8 +161,6 @@ def main():
 
 
 # Declare signal handler to immediately exit on KeyboardInterrupt
-
-
 def signal_handler(signal, frame):
     os._exit(0)
 
