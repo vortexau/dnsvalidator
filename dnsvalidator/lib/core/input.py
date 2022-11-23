@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
 import sys
-import requests
-from urllib.parse import urlparse
 from argparse import ArgumentParser
 from pathlib import Path
+from urllib.parse import urlparse
+
+import requests
+
 
 class InputHelper(object):
     @staticmethod
@@ -47,24 +49,27 @@ class InputHelper(object):
             items = requests.get(arg)
         except:
             e = sys.exc_info()[0]
-            parser.error(f"Tried to fetch {arg} but got {e} are you sure this is a valid URL?")
+            parser.error(
+                f"Tried to fetch {arg} but got {e} are you sure this is a valid URL?"
+            )
 
         if items.status_code != 200:
-            parser.error(f"Tried to fetch {arg} but got HTTP {items.status_code} {items.reason}.")
+            parser.error(
+                f"Tried to fetch {arg} but got HTTP {items.status_code} {items.reason}."
+            )
 
         return items.text.split()
 
     @staticmethod
     def process_file(arg):
-        with open(arg, 'r') as file:
-            return [line.rstrip('\n') for line in file]
+        with open(arg, "r") as file:
+            return [line.rstrip("\n") for line in file]
 
     @staticmethod
     def check_positive(parser, arg):
         i = int(arg)
         if i <= 0:
-            raise parser.ArgumentTypeError(
-                "%s is not a valid positive integer!" % arg)
+            raise parser.ArgumentTypeError("%s is not a valid positive integer!" % arg)
 
         return arg
 
@@ -88,9 +93,9 @@ class InputHelper(object):
         targets -= exclusions
 
         if len(targets) == 0:
-            raise Exception(
-                "No target remaining after removing all exceptions.")
+            raise Exception("No target remaining after removing all exceptions.")
         return targets
+
 
 class InputParser(object):
     def __init__(self):
@@ -106,78 +111,107 @@ class InputParser(object):
         targets = parser.add_mutually_exclusive_group(required=False)
 
         targets.add_argument(
-            '-t', dest='target', required=False,
-            help='Specify a target DNS server to try resolving.'
+            "-t",
+            dest="target",
+            required=False,
+            help="Specify a target DNS server to try resolving.",
         )
 
         targets.add_argument(
-            '-tL', dest='target_list', required=False,
-            help='Specify a list of target DNS servers to try to resolve. '
-                 'May be a file, or URL to listing',
+            "-tL",
+            dest="target_list",
+            required=False,
+            help="Specify a list of target DNS servers to try to resolve. "
+            "May be a file, or URL to listing",
             default="https://public-dns.info/nameservers.txt",
-            type=lambda x: InputHelper.process_targets(parser, x)
+            type=lambda x: InputHelper.process_targets(parser, x),
         )
 
         # exclusions group
         exclusions = parser.add_mutually_exclusive_group()
 
         exclusions.add_argument(
-            '-e', dest='exclusion', required=False,
-            help='Specify an exclusion to remove from any target lists.'
+            "-e",
+            dest="exclusion",
+            required=False,
+            help="Specify an exclusion to remove from any target lists.",
         )
 
         exclusions.add_argument(
-            '-eL', dest='exclusions_list', required=False,
-            help='Specify a list of exclusions to avoid resolving. '
-                 'May be a file or URL to listing',
-            type=lambda x: InputHelper.process_targets(parser, x)
+            "-eL",
+            dest="exclusions_list",
+            required=False,
+            help="Specify a list of exclusions to avoid resolving. "
+            "May be a file or URL to listing",
+            type=lambda x: InputHelper.process_targets(parser, x),
         )
 
-        parser.add_argument('-o', '--output',
-                            dest='output',
-                            help='Destination file to write successful DNS validations to.')
+        parser.add_argument(
+            "-o",
+            "--output",
+            dest="output",
+            help="Destination file to write successful DNS validations to.",
+        )
 
         parser.add_argument(
-            '-r', dest='rootdomain', required=False,
+            "-r",
+            dest="rootdomain",
+            required=False,
             help="Specify a root domain to compare to (default:",
-            default="bet365.com"
+            default="bet365.com",
         )
 
         parser.add_argument(
-            '-q', dest='query', required=False,
+            "-q",
+            dest="query",
+            required=False,
             help="Specify a resolver query to use (default:dnsvalidator)",
-            default="dnsvalidator"
+            default="dnsvalidator",
         )
 
         parser.add_argument(
-            '-threads', dest='threads', required=False,
+            "-threads",
+            dest="threads",
+            required=False,
             help="Specify the maximum number of threads to run (DEFAULT:5)",
             default=5,
-            type=lambda x: InputHelper.check_positive(parser, x)
+            type=lambda x: InputHelper.check_positive(parser, x),
         )
 
         parser.add_argument(
-            '-timeout', dest='timeout', required=False,
+            "-timeout",
+            dest="timeout",
+            required=False,
             help="Command timeout in seconds (DEFAULT:600)",
             default=600,
-            type=lambda x: InputHelper.check_positive(parser, x)
+            type=lambda x: InputHelper.check_positive(parser, x),
         )
 
         parser.add_argument(
-            '--no-color', dest='nocolor', action='store_true', default=False,
-            help='If set then any foreground or background colours will be '
-                 'stripped out.'
+            "--no-color",
+            dest="nocolor",
+            action="store_true",
+            default=False,
+            help="If set then any foreground or background colours will be "
+            "stripped out.",
         )
 
         output_types = parser.add_mutually_exclusive_group()
         output_types.add_argument(
-            '-v', '--verbose', dest='verbose', action='store_true', default=False,
-            help='If set then verbose output will be displayed in the terminal.'
+            "-v",
+            "--verbose",
+            dest="verbose",
+            action="store_true",
+            default=False,
+            help="If set then verbose output will be displayed in the terminal.",
         )
         output_types.add_argument(
-            '--silent', dest='silent', action='store_true', default=False,
-            help='If set only findings will be displayed and banners '
-                 'and other information will be redacted.'
+            "--silent",
+            dest="silent",
+            action="store_true",
+            default=False,
+            help="If set only findings will be displayed and banners "
+            "and other information will be redacted.",
         )
 
         return parser
