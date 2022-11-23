@@ -45,8 +45,10 @@ responses = {}
 
 
 def resolve_address(server):
+    gotnxdomain = False
+
     # Skip if not IPv4
-    valid = re.match("^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", server)
+    valid = re.match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", server)
     if not valid:
         output.terminal(Level.VERBOSE, server, "skipping as not IPv4")
         return
@@ -60,8 +62,9 @@ def resolve_address(server):
     for nxdomaincheck in nxdomainchecks:
         # make sure random subdomains are NXDOMAIN
         try:
-            positivehn = "{rand}.{domain}".format(rand=rand(), domain=nxdomaincheck)
-            posanswer = resolver.resolve(positivehn, "A")
+            #positivehn = "{rand}.{domain}".format(rand=rand(), domain=nxdomaincheck)
+            positivehn = f"{rand()}.{nxdomaincheck}"
+            resolver.resolve(positivehn, "A")
 
             # nxdomain exception was not thrown, we got records when we shouldn't have.
             # Skip the server.
@@ -69,20 +72,18 @@ def resolve_address(server):
             return
         except dns.resolver.NXDOMAIN:
             pass
-        except Exception as e:
+        except Exception:
             output.terminal(
                 Level.ERROR, server, "Error when checking for DNS poisoning, passing"
             )
 
     # Check for nxdomain on the rootdomain we're checking
     try:
-        nxquery = "{rand}.{rootdomain}".format(
-            rand=rand(), rootdomain=arguments.rootdomain
-        )
-        nxanswer = resolver.resolve(nxquery, "A")
+        nxquery = f"{rand()}.{arguments.rootdomain}"
+        resolver.resolve(nxquery, "A")
     except dns.resolver.NXDOMAIN:
         gotnxdomain = True
-    except:
+    except Exception:
         output.terminal(Level.ERROR, server, "Error when checking NXDOMAIN, passing")
         return
 
@@ -133,7 +134,7 @@ def main():
                 baseline_server["pos"][positivebaseline] = str(rr)
 
         try:
-            nxdomanswer = resolver.resolve(arguments.query + arguments.rootdomain, "A")
+            resolver.resolve(arguments.query + arguments.rootdomain, "A")
             baseline_server["nxdomain"] = False
         except dns.resolver.NXDOMAIN:
             baseline_server["nxdomain"] = True
@@ -149,19 +150,17 @@ def main():
     with concurrent.futures.ThreadPoolExecutor(
         max_workers=int(arguments.threads)
     ) as executor:
-        thread = {
-            executor.submit(resolve_address, server): server
-            for server in InputHelper.return_targets(arguments)
-        }
+        for server in InputHelper.return_targets(arguments):
+            executor.submit(resolve_address, server)
     output.terminal(
         Level.INFO,
         0,
-        "Finished. Discovered {size} servers".format(size=len(valid_servers)),
+        "Finished. Discovered {len(valid_servers)} servers",
     )
 
 
 # Declare signal handler to immediately exit on KeyboardInterrupt
-def signal_handler(signal, frame):
+def signal_handler(handler_signal, frame):
     os._exit(0)
 
 
