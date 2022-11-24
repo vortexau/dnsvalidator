@@ -155,7 +155,7 @@ def main():
     output.terminal(
         Level.INFO,
         0,
-        "Finished. Discovered {len(valid_servers)} servers",
+        f"Finished. Discovered {len(valid_servers)} servers",
     )
 
 
