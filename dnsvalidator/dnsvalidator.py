@@ -10,6 +10,7 @@ import string
 import threading
 import time
 import concurrent.futures
+from ipaddress import ip_address, IPv4Address, IPv6Address
 
 
 from .lib.core.input import InputParser, InputHelper
@@ -29,8 +30,7 @@ arguments = parser.parse(sys.argv[1:])
 
 output = OutputHelper(arguments)
 output.print_banner()
-baselines = ["1.1.1.1", "8.8.8.8", "9.9.9.9"]
-
+baselines = ["1.1.1.1", "8.8.8.8"]
 
 positivebaselines = ["bet365.com", "telegram.com"]
 nxdomainchecks = ["facebook.com", "paypal.com", "google.com",
@@ -40,12 +40,21 @@ goodip = ""
 valid_servers = []
 responses = {}
 
+def validIPAddress(IP):
+    try:
+        ipType = type(ip_address(IP))
+        if ipType is IPv4Address or ipType is IPv6Address:
+                return ipType
+        else:
+                return False
+    except ValueError:
+        return False
 
 def resolve_address(server):
     # Skip if not IPv4
-    valid = re.match("^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", server)
+    valid = validIPAddress(server)
     if not valid:
-        output.terminal(Level.VERBOSE, server, "skipping as not IPv4")
+        output.terminal(Level.VERBOSE, server, "skipping as not valid IP")
         return
 
     output.terminal(Level.INFO, server, "Checking...")
@@ -66,7 +75,7 @@ def resolve_address(server):
             # nxdomain exception was not thrown, we got records when we shouldn't have.
             # Skip the server.
             output.terminal(Level.ERROR, server,
-                            "DNS poisoning detected, passing")
+                            "DNS poisoning detected, for " + positivehn + " passing")
             return
         except dns.resolver.NXDOMAIN:
             pass
@@ -97,7 +106,7 @@ def resolve_address(server):
         if responses[goodresponse]["nxdomain"] == gotnxdomain:
             nxdommatches += 1
 
-    if resolvematches == 3 and nxdommatches == 3:
+    if resolvematches == 2 and nxdommatches == 2:
         output.terminal(Level.ACCEPTED, server, "provided valid response")
         valid_servers.append(server)
     else:

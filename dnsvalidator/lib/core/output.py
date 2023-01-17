@@ -63,7 +63,7 @@ class OutputHelper(object):
 
         if self.output and level == 2:
             f = open(self.output, 'a+')
-            f.writelines("\n" + target)
+            f.writelines(target+"\n")
             f.close()
 
 
