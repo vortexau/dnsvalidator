@@ -65,6 +65,5 @@ $ docker run -v $(pwd):/dnsvalidator/output -t dnsvalidator -tL https://public-d
 # Caveats
 
 * **WARNING** Keep the thread count to a reasonable level and/or use a VPS/VPN appropriately. Pushing the thread count too high can make it look like you are attempting to attack DNS servers, resulting in network level DNS blocks from your ISP. _Ask us how we know..._ 
-* Only IPv4 DNS Resolvers are validated at the current time. IPv6 resolvers are skipped.
 * Root domains used for baseline tests must not be geolocated; specifically they must return the same IP address regardless of the location on the planet they are resolved from. Domains such as `google.com` or `facebook.com` (and many others) are not suitable for baselines, as they return a geo-located IP address when resolved.
   * Using a root domain that is geo-located will result in only resolvers local to the user being returned as valid.
