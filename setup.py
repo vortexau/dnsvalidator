@@ -19,7 +19,7 @@ with open("README.md") as file:
         version=__version__,
         author_email="",
         url="https://github.com/vortexau/dnsvalidator",
-        packages=find_packages(exclude=('tests')),
+        packages=find_packages(include=['dnsvalidator', 'dnsvalidator.*']),
         package_data={'dnsvalidator': ['*.txt']},
         entry_points={
             'console_scripts': [
