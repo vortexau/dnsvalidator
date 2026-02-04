@@ -80,9 +80,8 @@ def resolve_address(server):
         except dns.resolver.NXDOMAIN:
             pass
         except Exception as e:
-            output.terminal(Level.ERROR, server,
-                            "Error when checking for DNS poisoning, passing")
-
+            error_msg = str(e).split(';')[0].split(':')[0]
+            output.terminal(Level.ERROR, server, "Connection error: {}".format(error_msg))
     # Check for nxdomain on the rootdomain we're checking
     try:
         nxquery = "{rand}.{rootdomain}".format(
@@ -110,9 +109,7 @@ def resolve_address(server):
         output.terminal(Level.ACCEPTED, server, "provided valid response")
         valid_servers.append(server)
     else:
-        output.terminal(Level.REJECTED, server,
-                        "invalid response received")
-
+        output.terminal(Level.REJECTED, server, "Response mismatch or validation failed")
 
 def main():
     global goodip
