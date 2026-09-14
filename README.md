@@ -45,7 +45,7 @@ Dependencies will then be installed and DNS Validator will be added to your path
 ## CLI:
 
 ```bash
-$ dnsvalidator -tL https://public-dns.info/nameservers.txt -threads 20 -o resolvers.txt
+$ dnsvalidator -tL https://publicdns.info/nameservers.txt -threads 20 -o resolvers.txt
 ```
 
 ## Docker:
@@ -59,7 +59,7 @@ $ docker build -t dnsvalidator .
 Run:
 
 ```bash
-$ docker run -v $(pwd):/dnsvalidator/output -t dnsvalidator -tL https://public-dns.info/nameservers.txt -threads 20 -o /dnsvalidator/output/resolvers.txt
+$ docker run -v $(pwd):/dnsvalidator/output -t dnsvalidator -tL https://publicdns.info/nameservers.txt -threads 20 -o /dnsvalidator/output/resolvers.txt
 ```
 
 # Caveats

@@ -114,7 +114,7 @@ class InputParser(object):
             '-tL', dest='target_list', required=False,
             help='Specify a list of target DNS servers to try to resolve. '
                  'May be a file, or URL to listing',
-            default="https://public-dns.info/nameservers.txt",
+            default="https://publicdns.info/nameservers.txt",
             type=lambda x: InputHelper.process_targets(parser, x)
         )
 
