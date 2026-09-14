@@ -32,7 +32,7 @@ output = OutputHelper(arguments)
 output.print_banner()
 baselines = ["1.1.1.1", "8.8.8.8"]
 
-positivebaselines = ["bet365.com", "telegram.com"]
+positivebaselines = ["bet365.com"]
 nxdomainchecks = ["facebook.com", "paypal.com", "google.com",
                   "bet365.com", "wikileaks.com"]
 
