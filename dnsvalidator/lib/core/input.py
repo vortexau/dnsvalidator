@@ -6,6 +6,9 @@ from urllib.parse import urlparse
 from argparse import ArgumentParser
 from pathlib import Path
 
+DEFAULT_TARGET_LIST_URL = "https://publicdns.info/nameservers.txt"
+
+
 class InputHelper(object):
     @staticmethod
     def process_targets(parser, arg):
@@ -75,7 +78,20 @@ class InputHelper(object):
         if arguments.target:
             targets.add(arguments.target)
         else:
-            for item in arguments.target_list:
+            # argparse eagerly converts string defaults, so the default
+            # target list is fetched lazily here instead of at parse time.
+            # Otherwise even `-t <server>` triggers a network fetch first.
+            target_list = arguments.target_list
+            if target_list is None:
+                items = requests.get(DEFAULT_TARGET_LIST_URL)
+                if items.status_code != 200:
+                    raise Exception(
+                        "Tried to fetch {} but got HTTP {} {}.".format(
+                            DEFAULT_TARGET_LIST_URL, items.status_code, items.reason
+                        )
+                    )
+                target_list = items.text.split()
+            for item in target_list:
                 targets.add(item)
 
         if arguments.exclusion:
@@ -113,8 +129,9 @@ class InputParser(object):
         targets.add_argument(
             '-tL', dest='target_list', required=False,
             help='Specify a list of target DNS servers to try to resolve. '
-                 'May be a file, or URL to listing',
-            default="https://publicdns.info/nameservers.txt",
+                 'May be a file, or URL to listing. Defaults to '
+                 'https://publicdns.info/nameservers.txt',
+            default=None,
             type=lambda x: InputHelper.process_targets(parser, x)
         )
 
